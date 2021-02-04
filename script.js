@@ -256,7 +256,6 @@ class App {
         <span class="workout__unit">spm</span>
       </div>
       <div class="workout__controls">
-          <span class="workout__edit">🖊️</span>
           <span class="workout__close">✖️</span>
       </div>
     </li>
