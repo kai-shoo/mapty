@@ -222,7 +222,6 @@ class App {
       )
       .openPopup();
 
-    workout.marker = L.stamp(marker);
     this._markers.push(marker);
   }
 
@@ -276,7 +275,6 @@ class App {
         <span class="workout__unit">m</span>
       </div>
       <div class="workout__controls">
-          <span class="workout__edit">🖊️</span>
           <span class="workout__close">✖️</span>
       </div>
     </li>
@@ -308,17 +306,16 @@ class App {
 
     if (!workoutEl || !e.target.classList.contains('workout__close')) return;
 
-    const marker = this._workouts.find(work => work.id === workoutEl.dataset.id)
-      .marker;
-
-    this._workouts = this._workouts.filter(
-      work => work.id !== workoutEl.dataset.id
+    const indexOfDeleted = this._workouts.findIndex(
+      work => work.id === workoutEl.dataset.id
     );
 
-    workoutEl.remove();
-    this._setLocalStorage();
+    this._workouts.splice(indexOfDeleted, 1);
 
-    this._deleteMarker(marker);
+    workoutEl.remove();
+    this._deleteMarker(indexOfDeleted);
+
+    this._setLocalStorage();
   }
 
   _setLocalStorage() {
@@ -341,8 +338,9 @@ class App {
     location.reload();
   }
 
-  _deleteMarker(marker) {
-    const markerItem = this._markers.find(item => L.stamp(item) === marker);
+  _deleteMarker(indexOfDeleted) {
+    const markerItem = this._markers[indexOfDeleted];
+    this._markers.splice(indexOfDeleted, 1);
 
     this._map.removeLayer(markerItem);
   }
